@@ -12,8 +12,8 @@ class createFile {
 	private $delimiter = ",";
 	private $objectMinLength = 5;
 	private $objectMaxLength = 30;
-	private $spacesMinLength = 5;
-	private $spacesMaxLength = 30;
+	private $spacesMinLength = 0;
+	private $spacesMaxLength = 15;
 	private $sequenceLength = 10;
 	private $outputFile = "output.txt"; 
 	private $maxFileSize = 1024; //in mb
@@ -37,6 +37,10 @@ class createFile {
 		else echo $this->errorMsg;
  	}
 
+ 	public function randomNumber($min, $max){  //Just a wrapper around default php rand(), can change to custom random number generation if required
+			return rand($min,$max);
+	}
+
 	public function randomString($charSet, $length){
 			$valid_chars= $charSet;
 			$random_string = "";
@@ -54,14 +58,21 @@ class createFile {
 		$sequence = "";
 
 		for($i=0; $i <= $this->sequenceLength; $i++) {
-
-			$randomLength = rand($this->objectMinLength,$this->objectMaxLength); //Pick Random object length
+			$string = " ";
+			$randomLength = self::randomNumber($this->objectMinLength,$this->objectMaxLength); //Pick Random object length
 			$randomObjectType = $items[array_rand($items)]; //Pick Random object type from array
 
-			$r = self::randomString( $randomObjectType, $randomLength ); //Generate random string of random object, with random length
-			$s = str_pad($r,10);
+			$randString = self::randomString( $randomObjectType, $randomLength ); //Generate random string of random object, with random length
 
-			$sequence.= $s.$delimiter;
+			$spaceLengthBefore = self::randomNumber($this->spacesMinLength,$this->spacesMaxLength);
+			$spaceLengthAfter = self::randomNumber($this->spacesMinLength,$this->spacesMaxLength);
+
+			$spacesBefore = str_repeat(' ', $spaceLengthBefore); //Create Random spaces 
+			$spacesAfter = str_repeat(' ', $spaceLengthAfter); //Create Random spaces 
+			
+			$string = $spacesBefore.$randString.$spacesAfter; //Add random spaces before and after
+
+			$sequence.= $string.$delimiter; //Append delimiter at the end
 		}
 		$sequence = rtrim($sequence, ","); //Remove trailing comma
 		return $sequence;
@@ -83,9 +94,7 @@ class createFile {
 
 }
 
-
 $c = new createFile();
 $c->init();
-
 
 ?>
