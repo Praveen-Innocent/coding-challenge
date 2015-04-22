@@ -16,7 +16,7 @@ class createFile {
 	private $spacesMaxLength = 15;
 	private $sequenceLength = 10;
 	private $outputFile = "output.txt"; 
-	private $maxFileSize = 1024; //in mb
+	private $maxFileSize = 1000; //in bytes
 	private $successMsg = "Success! Output written to file: "; 
 	private $errorMsg = "Something went wrong!"; 
 
@@ -81,9 +81,14 @@ class createFile {
 	public function writeToFile($contents) {
 		$file = $this->outputFile;
 		if (file_exists($file) ) {
-		  $fh = fopen($file, 'a'); // if exists, append to it
+			if(filesize($file) > $this->maxFileSize) {
+				echo "File size crossed maximum limit";  //Any action 
+				exit;
+			}
+
+			$fh = fopen($file, 'a'); // if exists, append to it
 		} else {
-		  $fh = fopen($file, 'w'); //else create new
+			$fh = fopen($file, 'w'); //else create new
 		} 
 
 		$res = fwrite($fh, $contents);
