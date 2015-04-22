@@ -31,14 +31,13 @@ class readFile
     
     public function parseContents($contents) //Convert the file contents into an array of random objects
     {
-        $arr = explode(',', $contents);
+        $arr = array_map('trim', explode(',', $contents));
         return $arr;
     }
     
     public function getObjType($obj) //Returns an array of random objects
     {
         
-        $obj = str_replace(' ', '', $obj); //Remove unwanted spaces from object
         $map = $this->patternMap;
         
         foreach ($map as $patternName => $pattern) {
@@ -58,7 +57,7 @@ class readFile
         foreach ($arr as $key) {
             $type = self::getObjType($key); //Get each object type
             print $key . " - " . $type;
-            print "<br>";
+            print "\n";
         }
     }
     
